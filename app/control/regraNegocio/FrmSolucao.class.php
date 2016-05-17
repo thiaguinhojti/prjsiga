@@ -45,6 +45,7 @@ class FrmSolucao extends TPage
         ####Campos segunda página####
         
         $page1->addRow();
+        $page2->addRow();
         
         
         
