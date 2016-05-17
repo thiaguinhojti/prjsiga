@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <tnotebook id="0">
+        <class>TNotebook</class>
+        <name>reproducao</name>
+        <x>-5</x>
+        <y>5</y>
+        <width>403</width>
+        <height>302</height>
+        <pages>
+            <tpanel id="1" tab="Reprodução">
+                <tlabel id="0">
+                    <class>TLabel</class>
+                    <name>reprodução</name>
+                    <x>5</x>
+                    <y>15</y>
+                    <color>#E3001F</color>
+                    <size>14</size>
+                    <style>b</style>
+                    <value>REPRODUÇÃO..:</value>
+                </tlabel>
+                <tdbcombo id="1">
+                    <class>TDBCombo</class>
+                    <name>reproducao</name>
+                    <database>dbwf</database>
+                    <model>Reproducao</model>
+                    <key>idReproducao</key>
+                    <display>codigo</display>
+                    <x>175</x>
+                    <y>15</y>
+                    <width>100</width>
+                    <tip>Selecione o número da Reprodução</tip>
+                </tdbcombo>
+                <tframe id="2">
+                    <class>TFrame</class>
+                    <name>frame_reproducao</name>
+                    <title>Totais Reprodução</title>
+                    <x>5</x>
+                    <y>60</y>
+                    <width>275</width>
+                    <height>190</height>
+                    <child>
+                        <tpanel>
+                            <tlabel id="0">
+                                <class>TLabel</class>
+                                <name>soro</name>
+                                <x>5</x>
+                                <y>12</y>
+                                <color>#000000</color>
+                                <size>11</size>
+                                <style></style>
+                                <value>SORO..:</value>
+                            </tlabel>
+                            <tlabel id="1">
+                                <class>TLabel</class>
+                                <name>hipofise</name>
+                                <x>5</x>
+                                <y>52</y>
+                                <color>#000000</color>
+                                <size>11</size>
+                                <style></style>
+                                <value>HIPÓFISE..:</value>
+                            </tlabel>
+                            <tlabel id="2">
+                                <class>TLabel</class>
+                                <name>pVolTotalAplicado</name>
+                                <x>5</x>
+                                <y>93</y>
+                                <color>#000000</color>
+                                <size>11</size>
+                                <style></style>
+                                <value>VOL. TOTAL 1ª AP..:</value>
+                            </tlabel>
+                            <tlabel id="3">
+                                <class>TLabel</class>
+                                <name>sVolTotalAplicado</name>
+                                <x>5</x>
+                                <y>132</y>
+                                <color>#000000</color>
+                                <size>11</size>
+                                <style></style>
+                                <value>VOL. TOTAL 2ª AP..:</value>
+                            </tlabel>
+                            <tentry id="4">
+                                <class>TEntry</class>
+                                <name>totalSoro</name>
+                                <x>115</x>
+                                <y>10</y>
+                                <value></value>
+                                <mask></mask>
+                                <width>143</width>
+                                <maxlen>0</maxlen>
+                                <editable>0</editable>
+                                <tip>Cálculo do valor total de soro a ser aplicado</tip>
+                                <required></required>
+                            </tentry>
+                            <tentry id="5">
+                                <class>TEntry</class>
+                                <name>entry3</name>
+                                <x>115</x>
+                                <y>50</y>
+                                <value></value>
+                                <mask></mask>
+                                <width>145</width>
+                                <maxlen>0</maxlen>
+                                <editable>1</editable>
+                                <tip></tip>
+                                <required></required>
+                            </tentry>
+                            <tentry id="6">
+                                <class>TEntry</class>
+                                <name>pVolTotalAplicado</name>
+                                <x>145</x>
+                                <y>90</y>
+                                <value></value>
+                                <mask></mask>
+                                <width>113</width>
+                                <maxlen>0</maxlen>
+                                <editable>1</editable>
+                                <tip>Volume total de solução usado na primeira aplicação </tip>
+                                <required></required>
+                            </tentry>
+                            <tentry id="7">
+                                <class>TEntry</class>
+                                <name>entry4</name>
+                                <x>145</x>
+                                <y>132</y>
+                                <value></value>
+                                <mask></mask>
+                                <width>114</width>
+                                <maxlen>0</maxlen>
+                                <editable>1</editable>
+                                <tip></tip>
+                                <required></required>
+                            </tentry>
+                        </tpanel>
+                    </child>
+                </tframe>
+            </tpanel>
+            <tpanel id="2" tab="1ª Aplicação">
+                <tdatagrid id="0">
+                    <class>TDataGrid</class>
+                    <name>matrizes</name>
+                    <x>5</x>
+                    <y>60</y>
+                    <loader></loader>
+                    <template>edit.php</template>
+                    <width>300</width>
+                    <height>200</height>
+                    <columns>
+                        <tdatagridcolumn id="1">
+                            <name>header2</name>
+                            <align>left</align>
+                            <label>Header2</label>
+                            <width>103</width>
+                        </tdatagridcolumn>
+                    </columns>
+                    <actions/>
+                    <pagenavigator>no</pagenavigator>
+                </tdatagrid>
+            </tpanel>
+        </pages>
+    </tnotebook>
+</form>
