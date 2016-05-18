@@ -19,7 +19,7 @@ class FrmMatriz extends TPage
         // creates the form
         $this->form = new TQuickForm('form_Matriz');
         $this->form->class = 'tform'; // change CSS class
-        //$this->form = new BootstrapFormWrapper($this->form);
+        $this->form = new BootstrapFormWrapper($this->form);
         $this->form->style = 'display: table;width:70%'; // change style
         
         // define the form title
@@ -212,6 +212,7 @@ class FrmMatriz extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('dbwf'); // open a transaction
                     $object = new Matriz($key); // instantiates the Active Record
+                    TEntry::disableField('FrmMatriz','numeroChipMatriz');
                     $object->idMatriz = str_pad($object->idMatriz, 10,"0", STR_PAD_LEFT); 
                     $object->pesoMatriz = str_replace('.',',', $object->pesoMatriz);
                     $object->compCabecaMatriz = str_replace('.',',', $object->compCabecaMatriz);
@@ -225,6 +226,7 @@ class FrmMatriz extends TPage
                         $this->frame->add( $image );
                     }
                     //$uniqueValidator->validate('CHIP', $object->numeroChipMatriz, array('database' => 'dbwf', 'model' => 'Matriz','field' => 'numeroChipMatriz', 'id' => $object->idMatriz));
+                    
                     $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }

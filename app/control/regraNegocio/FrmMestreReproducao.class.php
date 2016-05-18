@@ -354,7 +354,7 @@ class FrmMestreReproducao extends TPage
                        $reproducao_matrizes[] = $repmatriz;
                        //$reproducao_matrizes[] = $repmatriz->matriz;
                        //$reproducao_matrizes['']
-                       var_dump($repmatriz->numeroChipMatriz);
+                      
                    }
                    $object->matrizes = $reproducao_matrizes;
                    FrmMestreReproducao::onCalcular($param);

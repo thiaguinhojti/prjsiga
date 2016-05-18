@@ -34,7 +34,7 @@ class FrmSolucao extends TPage
         $cmbReproducao = new TDBCombo('reproducao_id','dbwf','Reproducao','idReproducao','idReproducao');
         $reproducao = new TEntry('idReproducao');
         
-        $cmbReproducao->setChangeAction();
+        //$cmbReproducao->setChangeAction();
         
         $soro = new TEntry('totalSoro');
         $soro->setTip('Quantidade Total de Soro usada nesta Reprodução!');
@@ -44,8 +44,7 @@ class FrmSolucao extends TPage
         
         ####Campos segunda página####
         
-        $page1->addRow();
-        $page2->addRow();
+      
         
         
         
