@@ -39,7 +39,7 @@ class FrmMatriz extends TPage
         $dataCadastro = new THidden('dataCadastro');
         $idEspecie = new TDBCombo('idEspecie','dbwf','Especie','idEspecie','nomePopularEspecie');
         $status = new TCombo('status');
-        $photo_path = new TFile('photo_path');
+       
         
         
         
@@ -74,7 +74,7 @@ class FrmMatriz extends TPage
         $this->form->addQuickField('LARGURA..: ', $larguraMatriz,  100 );
         $this->form->addQuickField('ESPECIE..:', $idEspecie, 100);
         $this->form->addQuickField('STATUS..: ', $status,  100 );
-        $this->form->addQuickField('IMAGEM..:', $photo_path,200);
+       
         
         $numeroChipMatriz->setTip('Informe o número do chip implantado no reprodutor');
         $pesoMatriz->setTip('Informe o peso do reprodutor');
@@ -104,9 +104,7 @@ class FrmMatriz extends TPage
         $row->addCell('');
         $row->addCell($this->frame);
         
-        $photo_path->setSize(200, 40);
        
-        $photo_path->setCompleteAction(new TAction(array($this, 'onComplete')));
         /** samples
          $this->form->addQuickFields('Date', array($date1, new TLabel('to'), $date2)); // side by side fields
          $fieldX->addValidation( 'Field X', new TRequiredValidator ); // add validation
@@ -145,25 +143,17 @@ class FrmMatriz extends TPage
             
             $this->form->validate(); // validate form data
             $object = new Matriz;  // create an empty object          
-            $source_file   = 'tmp/'.$object->photo_path;
-            $target_file   = 'images/' . $object->photo_path;
-            $finfo         = new finfo(FILEINFO_MIME_TYPE);
-            
-             if (file_exists($source_file) AND ($finfo->file($source_file) == 'image/png' OR $finfo->file($source_file) == 'image/jpeg'))
-            {
-                // move to the target directory
-                rename($source_file, $target_file);
-                $object = new Matriz;  // create an empty object
-                $data = $this->form->getData(); // get form data as array
-                $object->fromArray( (array) $data); // load the object with data
-                $object->pesoMatriz = str_replace(',','.',$object->pesoMatriz);
-                $object->compCabecaMatriz = str_replace(',','.', $object->compCabecaMatriz);
-                $object->compParcialMatriz = str_replace(',','.', $object->compParcialMatriz);
-                $object->compTotalMatriz = str_replace(',','.', $object->compTotalMatriz);
-                $object->larguraMatriz = str_replace(',','.', $object->larguraMatriz);
-                $object->idMatriz = str_pad($object->idMatriz, 10,"0", STR_PAD_LEFT);    
-                $object->photo_path = 'images/'.$object->photo_path;                     
-                $object->store(); // save the object
+            $object = new Matriz;  // create an empty object
+            $data = $this->form->getData(); // get form data as array
+            $object->fromArray( (array) $data); // load the object with data
+            $object->pesoMatriz = str_replace(',','.',$object->pesoMatriz);
+            $object->compCabecaMatriz = str_replace(',','.', $object->compCabecaMatriz);
+            $object->compParcialMatriz = str_replace(',','.', $object->compParcialMatriz);
+            $object->compTotalMatriz = str_replace(',','.', $object->compTotalMatriz);
+            $object->larguraMatriz = str_replace(',','.', $object->larguraMatriz);
+            $object->idMatriz = str_pad($object->idMatriz, 10,"0", STR_PAD_LEFT);    
+            $object->photo_path = 'images/'.$object->photo_path;                     
+            $object->store(); // save the object
                 
                 
                 
@@ -172,11 +162,8 @@ class FrmMatriz extends TPage
                 
                 $this->form->setData($data); // fill form data
                 TTransaction::close(); // close the transaction
-             }
                 new TMessage('info', 'Registro Gravado com Sucesso!');
-                 $image = new TImage($object->photo_path);
-                 $image->style = 'width: 100%';
-                 $this->frame->add( $image );
+                
              }   
         
            

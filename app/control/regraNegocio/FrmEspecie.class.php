@@ -35,7 +35,7 @@ class FrmEspecie extends TPage
         $qtdeSoroKgPv1 = new TEntry('qtdeSoroKgPv1');
         $qtdeSoroKgPv2 = new TEntry('qtdeSoroKgPv2');
         $QtdeMaximaAplicacoes = new TEntry('QtdeMaximaAplicacoes');
-        $idFamiliaEspecie =  new TDBCombo('idFamiliaEspecie','dbwf','familiaespecie','idFamiliaEspecie','descricaoFamilia');
+        $idFamiliaEspecie =  new TDBCombo('idFamiliaEspecie','dbwf','FamiliaEspecie','idFamiliaEspecie','descricaoFamilia');
         $tipoEspecie = new TCombo('tipoEspecie');
         $tamanhoMaximo->setTip('Tamanho máximo em metros alcançado pela espécie');
         $tamanhoMaximo->setNumericMask(2,',','.');

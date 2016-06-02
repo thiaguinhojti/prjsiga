@@ -86,7 +86,7 @@ class FrmMestreReproducao extends TPage
        $txEclosao          = new TEntry('txEclosao');
        $txFecundacao       = new TEntry('txFecundacao');
        
-       
+      
        if (!empty($codigo))
        {
             $codigo->setEditable(TRUE);
