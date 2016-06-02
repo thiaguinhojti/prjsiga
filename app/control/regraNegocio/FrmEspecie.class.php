@@ -19,12 +19,12 @@ class FrmEspecie extends TPage
         $this->form = new TQuickForm('form_Especie');
         $this->form->class = 'tform'; // change CSS class
         $this->form = new BootstrapFormWrapper($this->form);
-        $this->form->style = 'display: table;width:100%'; // change style
+        $this->form->style = 'display: table;width:90%;margin-right:20px'; // change style
         
         // define the form title
         $this->form->setFormTitle('Especie');
         
-
+        $this->form->setFieldsByRow(2);
 
         // create the form fields
         $idEspecie = new TEntry('idEspecie');
@@ -37,7 +37,7 @@ class FrmEspecie extends TPage
         $QtdeMaximaAplicacoes = new TEntry('QtdeMaximaAplicacoes');
         $idFamiliaEspecie =  new TDBCombo('idFamiliaEspecie','dbwf','familiaespecie','idFamiliaEspecie','descricaoFamilia');
         $tipoEspecie = new TCombo('tipoEspecie');
-        $tamanhoMaximo->setTip('Tamanho máximo alcançado pela espécie');
+        $tamanhoMaximo->setTip('Tamanho máximo em metros alcançado pela espécie');
         $tamanhoMaximo->setNumericMask(2,',','.');
         
         $qtdeSoroKgPv1->setNumericMask(2,',','.');
@@ -50,17 +50,22 @@ class FrmEspecie extends TPage
 
         // add the fields
         $this->form->addQuickField('CODIGO...:', $idEspecie,  100 );
-        $this->form->addQuickField('NOME POPULAR...:', $nomePopularEspecie,  200 , new TRequiredValidator);
-        $this->form->addQuickField('NOME CIENTIFICO...:', $nomeCientificoEspecie,  200 );
-        $this->form->addQuickField('TAMANHO MÁXIMO(cm)...:', $tamanhoMaximo,  200 );
-        $this->form->addQuickField('HORA GRAU DE REP...:', $horaGrauInicioReproducao,  100 );
-        $this->form->addQuickField('QUANTIDADE SORO 1ª..:', $qtdeSoroKgPv1,  100 );
-        $this->form->addQuickField('QUANTIDADE SORO 2ª..:', $qtdeSoroKgPv2,  100 );
-        $this->form->addQuickField('QUANTIDADE DE APLICAÇÕES..:', $QtdeMaximaAplicacoes,  100 );
+        $this->form->addQuickField('NOME...:', $nomePopularEspecie,  200 , new TRequiredValidator);
+        $this->form->addQuickField('NOME CIENT...:', $nomeCientificoEspecie,  200 );
+        $this->form->addQuickField('TAMANHO...:', $tamanhoMaximo,  200 );
+        $this->form->addQuickField('HORA-GRAU...:', $horaGrauInicioReproducao,  100 );
+        $this->form->addQuickField('1ª APLICAÇÃO..:', $qtdeSoroKgPv1,  100 );
+        $this->form->addQuickField('2ª APLICAÇÃO..:', $qtdeSoroKgPv2,  100 );
+        $this->form->addQuickField('NÚMERO DE APLICAÇÕES..:', $QtdeMaximaAplicacoes,  100 );
         $this->form->addQuickField('FAMILIA .....:', $idFamiliaEspecie,  200 , new TRequiredValidator);
         $this->form->addQuickField('TIPO.....:', $tipoEspecie,  200 );
 
-
+        $nomePopularEspecie->setTip('Informe o nome popular da espécie');
+        $nomeCientificoEspecie->setTip('Informe o nome científico da espécie');
+        $horaGrauInicioReproducao->setTip('Informe a hora-grau aproximada para início de reprodução');
+        $qtdeSoroKgPv1->setTip('Quantidade de Solução injetada na primeira aplicação em miligramas');
+        $qtdeSoroKgPv2->setTip('Quantidade de Solução injetada na segunda aplicação em miligramas');
+        $QtdeMaximaAplicacoes->setTip('Quantidade máxima de aplicações de hormônio');
 
 
         if (!empty($idEspecie))
@@ -77,11 +82,11 @@ class FrmEspecie extends TPage
         // create the form actions
         $this->form->addQuickAction(_t('Save'), new TAction(array($this, 'onSave')), 'fa:floppy-o');
         $this->form->addQuickAction(_t('New'),  new TAction(array($this, 'onClear')), 'bs:plus-sign green');
-        $this->form->addQuickAction(_t('Find'),new TAction(array('FrmListaEspecie','onReload')),'fa:table blue');
+        
         
         // vertical box container
         $container = new TVBox;
-        $container->style = 'width: 70%;position: relative; left:10%';
+        $container->style = 'width: 90%;position: relative; left:4px';
         // $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
         $container->add(TPanelGroup::pack('Cadastro de Espécie', $this->form));
         

@@ -76,6 +76,13 @@ class FrmMatriz extends TPage
         $this->form->addQuickField('STATUS..: ', $status,  100 );
         $this->form->addQuickField('IMAGEM..:', $photo_path,200);
         
+        $numeroChipMatriz->setTip('Informe o número do chip implantado no reprodutor');
+        $pesoMatriz->setTip('Informe o peso do reprodutor');
+        $compCabecaMatriz->setTip('Informe o tamanho da cabeça em cm');
+        $compParcialMatriz->setTip('Informe o tamanho do corpo em cm');
+        $compTotalMatriz->setTip('tamanho total da matriz em cm');
+        $larguraMatriz->setTip('Informe a largura da matriz em cm');
+        
                    
         $exit_action = new TAction(array($this,'onExitAction'));
         $compParcialMatriz->setExitAction($exit_action);
@@ -109,7 +116,7 @@ class FrmMatriz extends TPage
         // create the form actions
         $this->form->addQuickAction(_t('Save'), new TAction(array($this, 'onSave')), 'fa:floppy-o');
         $this->form->addQuickAction(_t('New'),  new TAction(array($this, 'onClear')), 'bs:plus-sign green');
-        $this->form->addQuickAction(_t('Find'),new TAction(array('FrmListaMatriz','onReload')),'fa:table blue');
+        
         
         // vertical box container
         $container = new TVBox;
@@ -212,7 +219,7 @@ class FrmMatriz extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('dbwf'); // open a transaction
                     $object = new Matriz($key); // instantiates the Active Record
-                    TEntry::disableField('FrmMatriz','numeroChipMatriz');
+                    TEntry::disableField('form_Matriz','numeroChipMatriz');
                     $object->idMatriz = str_pad($object->idMatriz, 10,"0", STR_PAD_LEFT); 
                     $object->pesoMatriz = str_replace('.',',', $object->pesoMatriz);
                     $object->compCabecaMatriz = str_replace('.',',', $object->compCabecaMatriz);

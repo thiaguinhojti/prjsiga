@@ -1,9 +1,9 @@
 <?php
 /**
- * FrmFamiliaEspecie Form
+ * Solucao1Form Form
  * @author  <your name here>
  */
-class FrmFamiliaEspecie extends TPage
+class FrmSolucao1 extends TPage
 {
     protected $form; // form
     
@@ -16,35 +16,40 @@ class FrmFamiliaEspecie extends TPage
         parent::__construct();
         
         // creates the form
-        $this->form = new TQuickForm('form_FamiliaEspecie');
+        $this->form = new TQuickForm('form_Solucao1');
         $this->form->class = 'tform'; // change CSS class
         $this->form = new BootstrapFormWrapper($this->form);
         $this->form->style = 'display: table;width:100%'; // change style
         
         // define the form title
-        $this->form->setFormTitle('FamiliaEspecie');
+        $this->form->setFormTitle('Solucao1');
         
 
 
         // create the form fields
-        $idFamiliaEspecie = new TEntry('idFamiliaEspecie');
-        $descricaoFamilia = new TEntry('descricaoFamilia');
+        $idSolucao = new TEntry('idSolucao');
+        $totalSoro = new TEntry('totalSoro');
+        $totalHipofise = new TEntry('totalHipofise');
+        $pVolTotalAplicado = new TEntry('pVolTotalAplicado');
+        $sVolTotalAplicado = new TEntry('sVolTotalAplicado');
+        $idReproducao = new TEntry('idReproducao');
 
 
         // add the fields
-        $this->form->addQuickField('CÓDIGO...:', $idFamiliaEspecie,  100 );
-        $this->form->addQuickField('DESCRIÇÃO...:', $descricaoFamilia,  200 );
-        
-        $descricaoFamilia->setTip('Descrição da família de espécie');
-        
-        $idFamiliaEspecie->setEditable(FALSE);
+        $this->form->addQuickField('Idsolucao', $idSolucao,  100 );
+        $this->form->addQuickField('Totalsoro', $totalSoro,  200 );
+        $this->form->addQuickField('Totalhipofise', $totalHipofise,  200 );
+        $this->form->addQuickField('Pvoltotalaplicado', $pVolTotalAplicado,  200 );
+        $this->form->addQuickField('Svoltotalaplicado', $sVolTotalAplicado,  200 );
+        $this->form->addQuickField('Idreproducao', $idReproducao,  100 );
 
 
-        if (!empty($idFamiliaEspecie))
+
+
+        if (!empty($idSolucao))
         {
-            $idFamiliaEspecie->setEditable(FALSE);
+            $idSolucao->setEditable(FALSE);
         }
-        $this->idFamiliaEspecie = str_pad($this->idFamiliaEspecie, 10,"0", STR_PAD_LEFT);
         
         /** samples
          $this->form->addQuickFields('Date', array($date1, new TLabel('to'), $date2)); // side by side fields
@@ -55,13 +60,12 @@ class FrmFamiliaEspecie extends TPage
         // create the form actions
         $this->form->addQuickAction(_t('Save'), new TAction(array($this, 'onSave')), 'fa:floppy-o');
         $this->form->addQuickAction(_t('New'),  new TAction(array($this, 'onClear')), 'bs:plus-sign green');
-       
         
         // vertical box container
         $container = new TVBox;
-        $container->style = 'width: 50%; margin-left: 10%';
+        $container->style = 'width: 90%';
         // $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-        $container->add(TPanelGroup::pack('Família de Espécies', $this->form));
+        $container->add(TPanelGroup::pack('Title', $this->form));
         
         parent::add($container);
     }
@@ -84,20 +88,18 @@ class FrmFamiliaEspecie extends TPage
             
             $this->form->validate(); // validate form data
             
-            $object = new FamiliaEspecie;  // create an empty object
+            $object = new Solucao;  // create an empty object
             $data = $this->form->getData(); // get form data as array
-            $object->idFamiliaEspecie = str_pad($object->idFamiliaEspecie, 10,"0", STR_PAD_LEFT);
             $object->fromArray( (array) $data); // load the object with data
             $object->store(); // save the object
             
-            // get the generated idFamiliaEspecie
-            $data->idFamiliaEspecie = $object->idFamiliaEspecie;
+            // get the generated idSolucao
+            $data->idSolucao = $object->idSolucao;
             
             $this->form->setData($data); // fill form data
             TTransaction::close(); // close the transaction
             
-            new TMessage('info', 'Registro gravado com sucesso!');
-           
+            new TMessage('info', TAdiantiCoreTranslator::translate('Record saved'));
         }
         catch (Exception $e) // in case of exception
         {
@@ -128,8 +130,7 @@ class FrmFamiliaEspecie extends TPage
             {
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('dbwf'); // open a transaction
-                $object = new FamiliaEspecie($key); // instantiates the Active Record
-                $object->idFamiliaEspecie = str_pad($object->idFamiliaEspecie, 10,"0", STR_PAD_LEFT);
+                $object = new Solucao1($key); // instantiates the Active Record
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }

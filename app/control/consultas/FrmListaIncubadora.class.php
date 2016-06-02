@@ -48,7 +48,7 @@ class FrmListaIncubadora extends TPage
         $this->datagrid = new BootstrapDatagridWrapper($this->datagrid);
         $this->datagrid->style = 'width: 100%';
         $this->datagrid->setHeight(320);
-        // $this->datagrid->datatable = 'true';
+        $this->datagrid->datatable = 'true';
         // $this->datagrid->enablePopover('Popover', 'Hi <b> {name} </b>');
         
 
@@ -125,7 +125,7 @@ class FrmListaIncubadora extends TPage
         $container = new TVBox;
         $container->style = 'width: 90%';
         // $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-        $container->add(TPanelGroup::pack('Title', $this->form));
+        $container->add(TPanelGroup::pack('Lista de Incubadoras', $this->form));
         $container->add($gridpack);
         $container->add($this->pageNavigation);
         

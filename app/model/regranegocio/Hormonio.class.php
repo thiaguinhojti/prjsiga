@@ -19,6 +19,9 @@ class Hormonio extends TRecord
         parent::addAttribute('nomeHormonio');
         parent::addAttribute('descHormonio');
         parent::addAttribute('valorHormonio');
+        parent::addAttribute('qtdeAplicKvP');
+        parent::addAttribute('idSolucao');
+        parent::addAttribute('valorHormonioAplicacao');
     }
 
 

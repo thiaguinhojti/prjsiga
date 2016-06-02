@@ -65,19 +65,11 @@
                 <icon>fa:user fa-fw</icon>
                 <action>FrmEspecie</action>
             </menuitem>
-            <menuitem label='Matriz'>
+            <menuitem label='Biometria'>
                 <icon>fa:user fa-fw</icon>
                 <action>FrmMatriz</action>
             </menuitem>
-            <menuitem label='Hormonios'>
-                <icon>fa:fa fa-flask fa-fw</icon>
-                <action>FrmHormonio</action>
-            </menuitem>
-            <menuitem label='Soro'>
-                <icon>fa:fa fa-flask fa-fw</icon>
-                <action>FrmSoro</action>
-            </menuitem>
-        </menu>
+         </menu>
     </menuitem>
     <menuitem label='Manejo'>
         <menu>
@@ -85,16 +77,12 @@
                   <icon>fa:fa fa-bug</icon>
                   <action>FrmInclusaoMatrizTanque</action>
               </menuitem>
-              <menuitem label='Aplicação'>
-                  <icon></icon>
-                  <action>FrmAplicacaoHormonio</action>
-              </menuitem>
               <menuitem label='Reprodução'>
                   <icon>fa:fa fa-venus-mars</icon>
                   <action>FrmListaReproducao</action>
               </menuitem>
               <menuitem label='Aplicação de Hormônio'>
-                  <icon>fa:fa fa-venus-mars</icon>
+                  <icon>fa:fa fa-plus-square green</icon>
                   <action>FrmSolucao</action>
               </menuitem>
         </menu>

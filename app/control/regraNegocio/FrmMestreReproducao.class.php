@@ -64,7 +64,7 @@ class FrmMestreReproducao extends TPage
        $codigo              = new TEntry('codigo');
        $dataInicioReproducao = new TDate('dataInicioReproducao');
        $temperatura        = new TEntry('temperatura');
-       //$equipeReproducao   = new TEntry('equipeReproducao');
+       $especie            = new TDBCombo('idEspecie','dbwf','Especie','idEspecie','nomePopularEspecie');
        $climaDia           = new TEntry('climaDia');
        $pesoTotMatFemea    = new TEntry('pesoTotMatFemea');
        $pesoTotMatMacho    = new TEntry('pesoTotMatMacho');
@@ -152,7 +152,7 @@ class FrmMestreReproducao extends TPage
        $row->addcell($idReproducao);
        $tbl_dados_primarios->addRowSet(new TLabel('INICIO'.': ' ),    $dataInicioReproducao);
        $tbl_dados_primarios->addRowSet(new TLabel('TEMPERATURA'.': ' ),    $temperatura);
-       //$tbl_dados_primarios->addRowSet(new TLabel('EQUIPE'.': '),    $equipeReproducao);
+       $tbl_dados_primarios->addRowSet(new TLabel('ESPÉCIE'.': '),    $especie);
        $tbl_dados_primarios->addRowSet(new TLabel('CLIMA DO DIA'.': '),    $climaDia);
        //$tbl_dados_primarios->addRowSet(new TLabel('FINAL'.': '),    $dataFinalReproducao);
        

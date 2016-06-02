@@ -33,7 +33,8 @@ class FrmIncubadora extends TPage
 
         // add the fields
         $this->form->addQuickField('CÓDIGO...:', $idIncubadora,  100 );
-        $this->form->addQuickField('DESCRIÇÃO...:', $descIncubadora,  200 );
+        $this->form->addQuickField('IDENTIFICAÇÃO...:', $descIncubadora,  200 );
+        $descIncubadora->setTip('Identificação da Incubadora');
 
 
 

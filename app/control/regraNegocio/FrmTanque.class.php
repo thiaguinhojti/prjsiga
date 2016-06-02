@@ -33,6 +33,12 @@ class FrmTanque extends TPage
         $profMediaTanque = new TEntry('profMediaTanque');
         $VolumeAcMediaTanque = new TEntry('VolumeAcMediaTanque');
         $tipoTanque = new TCombo('tipoTanque');
+       
+        $areaMetroQuadradoTanque->setNumericMask(2,',','.');
+        $profMediaTanque->setNumericMask(2,',','.');
+        $VolumeAcMediaTanque->setNumericMask(2,',','.');
+        
+        
         
         $tipo_tanque = array();
         $tipo_tanque['E'] = 'Escavado';
@@ -48,6 +54,15 @@ class FrmTanque extends TPage
         $this->form->addQuickField('PROFUNDIDADE...:', $profMediaTanque,  200 );
         $this->form->addQuickField('VOLUME...:', $VolumeAcMediaTanque,  200 );
         $this->form->addQuickField('TIPO...:', $tipoTanque,  200 );
+        
+        $exit_action = new TAction(array($this,'onExitAction'));
+        $profMediaTanque->setExitAction($exit_action);
+        $VolumeAcMediaTanque->setEditable(FALSE); 
+        
+        $numeroTanque->setTip('Número de Identificação do tanque');
+        $areaMetroQuadradoTanque->setTip('Área do tanque em m²');
+        $profMediaTanque->setTip('profundidade média do tanque em metros');
+        $VolumeAcMediaTanque->setTip('Volume médio de água em m³');
 
         
 
@@ -97,6 +112,9 @@ class FrmTanque extends TPage
             $object = new Tanque;  // create an empty object
             $data = $this->form->getData(); // get form data as array
             $object->fromArray( (array) $data); // load the object with data
+            $object->areaMetroQuadradoTanque = str_replace(',','.',$object->areaMetroQuadradoTanque);
+            $object->profMediaTanque = str_replace(',','.',$object->profMediaTanque);
+            $object->VolumeAcMediaTanque = str_replace(',','.',$object->VolumeAcMediaTanque);
             $object->store(); // save the object
             
             // get the generated idTanque
@@ -138,6 +156,12 @@ class FrmTanque extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open('dbwf'); // open a transaction
                 $object = new Tanque($key); // instantiates the Active Record
+                TEntry::disableField('form_Tanque','numeroTanque');
+                $object->idTanque = str_pad($object->idTanque, 10,"0", STR_PAD_LEFT);
+                $object->areaMetroQuadradoTanque = str_replace('.',',', $object->areaMetroQuadradoTanque);
+                $object->profMediaTanque = str_replace('.',',', $object->profMediaTanque);
+                $object->VolumeAcMediaTanque = str_replace('.',',', $object->VolumeAcMediaTanque);
+                
                 $this->form->setData($object); // fill the form
                 TTransaction::close(); // close the transaction
             }
@@ -152,4 +176,16 @@ class FrmTanque extends TPage
             TTransaction::rollback(); // undo all pending operations
         }
     }
+    public static function onExitAction($param){
+    
+        $areaMetroQuadradoTanque = (double) str_replace(',','.', $param['areaMetroQuadradoTanque']);
+        $profMediaTanque = (double) str_replace(',','.', $param['profMediaTanque']);
+    
+        $obj = new StdClass;
+        $obj->VolumeAcMediaTanque = number_format(($areaMetroQuadradoTanque * $profMediaTanque),2,',','.');
+     
+        
+        
+        TForm::sendData('form_Tanque',$obj);
+   }
 }

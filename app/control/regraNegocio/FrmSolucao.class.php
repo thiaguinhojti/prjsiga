@@ -4,74 +4,156 @@ class FrmSolucao extends TPage
 {
 
     private $form;
-
+    private $datagrid_primeira_aplicacao;
+    private $datagrid_segunda_aplicacao;
     function __construct()
     {
     
         parent::__construct();
         
         //$this->form = new TQuickForm('form_Solucao');
-        $this->form = new BootstrapFormWrapper(new TQuickForm('form_solucao'));
+        $this->form = new TQuickForm('form_solucao');
         $this->form->class = 'tform'; // change CSS class
-        $this->form->style = 'display: table;width:70%'; // change style
-        $notebook  = new TNotebook(200, 350);
-        
+        $this->form->style = 'display: table;width:70%; margin-left:50px;'; // change style
+        //$this->form->setFormTitle('Aplicação de hormônios');
+        $notebook  = new BootstrapNotebookWrapper(new TNotebook(300, 350));
+       
         $this->form->add($notebook);
         
           parent::include_css('app/resources/custom-notebook.css');
         
         // creates the containers for each notebook page
         $tbl_solucao = new TTable;
+        $tbl_hormonio = new TTable;
+        $tbl_soro = new TTable;
         $tbl_pAplicacao = new TTable;
         $tbl_sAplicacao = new TTable;
-        $tbl_solucao->style = "margin: 4px";
+        $tbl_solucao->style = "margin: 2px;width:100%;";
         $tbl_pAplicacao->style = "margin: 4px";
         $tbl_sAplicacao->style = "margin: 4px";
+        $tbl_hormonio->style = "margin: 4px";
+        $tbl_soro->style = "margin: 4px";
+                
+        ####Campos primeira página######
         
-              
+        $idSolucao     = new THidden('idSolucao');
+        $cmbReproducao = new TDBSeekButton('idReproducao','dbwf',$this->form->getName(),'Reproducao','codigo','idReproducao','reproducao');
+        $reproducao = new TEntry('reproducao');
+        $pVolTotalAplicado = new TEntry('pVolTotalAplicado');
+        $pVolTotalAplicado->setTip('Volume total de solução a ser aplicado na primeira aplicação');
+        $sVolTotalAplicado = new TEntry('sVolTotalAplicado');
+        $sVolTotalAplicado->setTip('Volume total de solução a ser aplicado na segunda aplicação');
+        
+        //validações
         
         
+        
+         ####Adicionando os campos na aba do notebook####                
+        $tbl_solucao->addRowSet(new TLabel(''),$idSolucao);
+        $tbl_solucao->addRowSet(new TLabel('REPRODUÇÃO..:'),$cmbReproducao);
+        $tbl_solucao->addRowSet(new TLabel('Nº..........:'),$reproducao);
+        $tbl_solucao->addRowSet(new TLabel('VOL. TOTAL 1ª APLICAÇÃO..:'),$pVolTotalAplicado);
+        $tbl_solucao->addRowSet(new TLabel('VOL. TOTAL 2ª APLICAÇÃO..:'),$sVolTotalAplicado);
+        
+        #####Campos segunda Pagina#####
+        $lista_soro = new TMultiField('lista_soro');
+        $nome_soro = new TEntry('nomeSoro');
+        $desc_soro = new TEntry('descSoro');
+        $valor_soro = new TEntry('valorSoro');
+        $qtdeSoroAplicKvP = new TEntry('qtdeSoroAplicKvP');
+        $totalSoroAplicacao = new TEntry('totalSoroAplicacao');
+        
+        ####Adicionando os campos na aba do notebook####  
+        
+        $row = $tbl_soro->addRow();
+        $cell = $row->addCell(new TLabel('<b><h4>..::SORO::..</h4></b>'));
+        $cell->valign  = 'top';
+        $lista_soro->setHeight(100);
+        $lista_soro->setClass('Soro');
+        $lista_soro->addField('nomeSoro','NOME'.':',$nome_soro,150);
+        $lista_soro->addField('descSoro','DESCRIÇÃO'.':',$desc_soro,150);
+        $lista_soro->addField('valorSoro','VALOR EM R$'.':',$valor_soro,70);
+        $lista_soro->addField('qtdeSoroAplicKvP','TOTAL A SER APLICADO'.':',$qtdeSoroAplicKvP,70);
+        $lista_soro->addField('totalSoroAplicacao','TOTAL SORO EM R$'.':',$totalSoroAplicacao,70);
+        $row=$tbl_soro->addRow();
+        $row->addCell($lista_soro);
+        
+        #####Campos terceira Página#######
+        $lista_hormonio = new TMultiField('lista_hormonio');
+        $nome_hormonio = new TEntry('nomeHormonio');
+        $desc_hormonio = new TEntry('descHormonio');
+        $valor_hormonio = new TEntry('valorHormonio');
+        $qtdeHormonioAplicKvP = new TEntry('qtdeHormonioAplicKvP');
+        $totalHormonioAplicacao = new TEntry('totalHormonioAplicacao');
+        
+        ####Adicionando os campos na aba do notebook####  
+        
+        $row = $tbl_hormonio->addRow();
+        $cell = $row->addCell(new TLabel('<b><h4>..::HORMÔNIO::..</h4></b>'));
+        $cell->valign  = 'top';
+        $lista_hormonio->setHeight(100);
+        $lista_hormonio->setClass('Hormonio');
+        $lista_hormonio->addField('nomeHormonio','NOME'.':',$nome_hormonio,150);
+        $lista_hormonio->addField('descHormonio','DESCRIÇÃO'.':',$desc_hormonio,150);
+        $lista_hormonio->addField('valorHormonio','VALOR EM R$'.':',$valor_hormonio,70);
+        $lista_hormonio->addField('qtdeHormonioAplicKvP','TOTAL A SER APLICADO'.':',$qtdeHormonioAplicKvP,70);
+        $lista_hormonio->addField('totalHormonioAplicacao','TOTAL HORMÔNIO EM R$'.':',$totalHormonioAplicacao,70);
+        $row=$tbl_hormonio->addRow();
+        $row->addCell($lista_hormonio);
+        
+        #####Campos quarta Página#####
+        $this->datagrid_primeira_aplicacao = new TQuickGrid;
+        $this->datagrid_primeira_aplicacao->disableDefaultClick();
+        
+        /*$this->datagrid->addQuickColumn('Code',    'code',    'right', 70);
+        $this->datagrid->addQuickColumn('Name',    'name',    'left', 180);
+        $this->datagrid->addQuickColumn('Address', 'address', 'left', 180);
+        $this->datagrid->addQuickColumn('Phone',   'fone',    'left', 120);*/       
+        
+        $tbl_pAplicacao->addRowSet($this->datagrid_primeira_aplicacao);
+        #####Campos Quinta Página#####
+        $this->datagrid_segunda_aplicacao = new TQuickGrid;
+        $this->datagrid_segunda_aplicacao->disableDefaultClick();
+        
+        $tbl_sAplicacao->addRowSet($this->datagrid_segunda_aplicacao);
+        
+        
+        
+        //$this->form->addQuickAction(_t('Save'), new TAction(array($this, 'onSave')), 'fa:floppy-o');
+        //$this->form->addQuickAction(_t('New'),  new TAction(array($this, 'onClear')), 'bs:plus-sign green');
         $notebook->appendPage('Totais Solução', $tbl_solucao);
+        $notebook->appendPage('Soro', $tbl_soro);
+        $notebook->appendPage('Hormônio', $tbl_hormonio);
         $notebook->appendPage('1ª Aplicação', $tbl_pAplicacao);
         $notebook->appendPage('2ª Aplicação', $tbl_sAplicacao);
         
+        $save_button=new TButton('save');
+        $save_button->setAction(new TAction(array($this, 'onSave')), _t('Save'));
+        $save_button->setImage('fa:floppy-o');
         
+        // create an new button (edit with no parameters)
+        $new_button=new TButton('new');
+        $new_button->setAction(new TAction(array($this, 'onEdit')), _t('New'));
+        $new_button->setImage('fa:plus-square green');
         
-        ####Campos primeira página######
+        $list_button=new TButton('list');
+        $list_button->setAction(new TAction(array('FrmListaReproducao','onReload')), _t('Back to the listing'));
+        $list_button->setImage('fa:table blue');
         
-        $idSolucao        = new THidden('idSolucao');
-        $cmbReproducao = new TDBCombo('idReproducao','dbwf','Reproducao','idReproducao','idReproducao');
-        $reproducao = new TEntry('idReproducao');
+        $this->form->setFields(array($cmbReproducao, $lista_soro, $save_button, $new_button, $list_button));
         
-        //$cmbReproducao->setChangeAction();
+        $buttons = new THBox;
+        $buttons->add($save_button);
+        $buttons->add($new_button);
+        $buttons->add($list_button);
         
-        $soro = new TEntry('totalSoro');
-        $soro->setTip('Quantidade total de soro usada nesta Reprodução!');
-        $hipofise = new TEntry('totalHipofise');
-        $hipofise->setTip('Quantidade total de hipófise usada nesta Reprodução');
-        $pVolTotalAplicado = new TEntry('pVolTotalAplicado');
-        $pVolTotalAplicado->setTip('Volume total a ser aplicado na primeira aplicação');
-        $sVolTotalAplicado = new TEntry('sVolTotalAplicado');
-        $sVolTotalAplicado->setTip('Volume total a ser aplicado na segunda aplicação');
-        
-        $this->form->addQuickField('REPRODUÇÃO..:',$cmbReproducao);
-        $this->form->addQuickField('SORO..:', $soro);
-        $this->form->addQuickField('HIPÓFISE..:',$hipofise);
-        $this->form->addQuickField('VOL. TOTAL 1ª AP..:',$pVolTotalAplicado);
-        $this->form->addQuickField('VOL. TOTAL 2ª AP..:', $sVolTotalAplicado);
-        
-        
-        $this->form->addQuickAction(_t('Save'), new TAction(array($this, 'onSave')), 'fa:floppy-o');
-        //$this->form->addQuickAction(_t('New'),  new TAction(array($this, 'onClear')), 'bs:plus-sign green');
-        
-        
-        
-        
+        //$this->form->add($buttons);
         // vertical box container
         $container = new TVBox;
-        $container->style = 'width: 60%; position:absolut; margin-left:5%;';
+        $container->style = 'width: 60%;  margin-left:5%;';
         // $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-        $container->add(TPanelGroup::pack('Aplicação de Hormônios', $this->form));
+        $container->add(TPanelGroup::pack('Aplicação de Hormônios',$this->form));
+        $container->add($buttons);
         
         parent::add($container);   
         
@@ -83,14 +165,18 @@ class FrmSolucao extends TPage
        try
        {
            TTransaction::open('dbwf');
-           $this->form->validate();
-           
-           $object = new Solucao;
-           $data = $this->form->getData();
-           
-           $object->store();
-           $this->form->setData($data);
-           TTransaction::close();
+               $this->form->validate(); // validate form data
+               $object = new Solucao;  // create an empty object
+               $data = $this->form->getData(); // get form data as array
+               $object->fromArray( (array) $data); // load the object with data
+               $object->store(); // save the object
+                
+                // get the generated idSolucao
+               $data->idSolucao = $object->idSolucao;
+                
+               $this->form->setData($data); // fill form data
+           TTransaction::close(); // close the transaction
+             new TMessage('info','Registro Gravado com sucesso!');
            
        }
        catch(Exception $e)
@@ -100,7 +186,31 @@ class FrmSolucao extends TPage
             TTransaction::rollback(); //
        }
    }
-
+   public function onReload()
+   {
+       $this->datagrid_primeira_aplicacao->clear();
+       
+       try
+       {
+           
+       }
+       catch(Exception $e)
+       {
+           // shows the exception error message
+            new TMessage('Erro ao carregar os registros', $e->getMessage());
+            // undo all pending operations
+            TTransaction::rollback();  
+       }
+   }
+   public function onEdit()
+   {
+   
+   }
+   public function onChangeAction($param)
+   {
+       
+   
+   }
 }
 
 

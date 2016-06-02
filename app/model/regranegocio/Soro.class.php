@@ -19,6 +19,10 @@ class Soro extends TRecord
         parent::addAttribute('nomeSoro');
         parent::addAttribute('descSoro');
         parent::addAttribute('valorSoro');
+        parent::addAttribute('qtdeAplicSoroKvP');
+        parent::addAttribute('valorSoroAplicacao');
+        parent::addAttribute('idSolucao');
+       
     }
 
 

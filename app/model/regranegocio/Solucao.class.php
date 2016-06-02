@@ -10,8 +10,10 @@ class Solucao extends TRecord
     const IDPOLICY =  'max'; // {max, serial}
     
     
+    private $reproducao;
     private $soros;
     private $hormonios;
+    private $aplicacao_hormonios;
 
     /**
      * Constructor method
@@ -19,13 +21,38 @@ class Solucao extends TRecord
     public function __construct($id = NULL, $callObjectLoad = TRUE)
     {
         parent::__construct($id, $callObjectLoad);
-        parent::addAttribute('totalSoro');
-        parent::addAttribute('totalHipofise');
         parent::addAttribute('pVolTotalAplicado');
         parent::addAttribute('sVolTotalAplicado');
         parent::addAttribute('idReproducao');
     }
 
+    
+    /**
+     * Method set_reproducao
+     * Sample of usage: $solucao->reproducao = $object;
+     * @param $object Instance of Reproducao
+     */
+    public function set_reproducao(Reproducao $object)
+    {
+        $this->reproducao = $object;
+        $this->idreproducao = $object->id;
+    }
+    
+    /**
+     * Method get_reproducao
+     * Sample of usage: $solucao->reproducao->attribute;
+     * @returns Reproducao instance
+     */
+    public function get_reproducao()
+    {
+        // loads the associated object
+        if (empty($this->reproducao))
+            $this->reproducao = new Reproducao($this->idreproducao);
+    
+        // returns the associated object
+        return $this->reproducao;
+    }
+    
     
     /**
      * Method addSoro
@@ -66,6 +93,26 @@ class Solucao extends TRecord
     {
         return $this->hormonios;
     }
+    
+    /**
+     * Method addAplicacaoHormonio
+     * Add a AplicacaoHormonio to the Solucao
+     * @param $object Instance of AplicacaoHormonio
+     */
+    public function addAplicacaoHormonio(AplicacaoHormonio $object)
+    {
+        $this->aplicacao_hormonios[] = $object;
+    }
+    
+    /**
+     * Method getAplicacaoHormonios
+     * Return the Solucao' AplicacaoHormonio's
+     * @return Collection of AplicacaoHormonio
+     */
+    public function getAplicacaoHormonios()
+    {
+        return $this->aplicacao_hormonios;
+    }
 
     /**
      * Reset aggregates
@@ -74,6 +121,7 @@ class Solucao extends TRecord
     {
         $this->soros = array();
         $this->hormonios = array();
+        $this->aplicacao_hormonios = array();
     }
 
     /**
@@ -84,32 +132,22 @@ class Solucao extends TRecord
     {
     
         // load the related Soro objects
-        $repository = new TRepository('SolucaoSoro');
+        $repository = new TRepository('Soro');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $id));
-        $solucao_soros = $repository->load($criteria);
-        if ($solucao_soros)
-        {
-            foreach ($solucao_soros as $solucao_soro)
-            {
-                $soro = new Soro( $solucao_soro->idsoro );
-                $this->addSoro($soro);
-            }
-        }
+        $this->soros = $repository->load($criteria);
     
         // load the related Hormonio objects
-        $repository = new TRepository('SolucaoHormonio');
+        $repository = new TRepository('Hormonio');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $id));
-        $solucao_hormonios = $repository->load($criteria);
-        if ($solucao_hormonios)
-        {
-            foreach ($solucao_hormonios as $solucao_hormonio)
-            {
-                $hormonio = new Hormonio( $solucao_hormonio->idhormonio );
-                $this->addHormonio($hormonio);
-            }
-        }
+        $this->hormonios = $repository->load($criteria);
+    
+        // load the related AplicacaoHormonio objects
+        $repository = new TRepository('AplicacaoHormonio');
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('idsolucao', '=', $id));
+        $this->aplicacao_hormonios = $repository->load($criteria);
     
         // load the object itself
         return parent::load($id);
@@ -123,36 +161,49 @@ class Solucao extends TRecord
         // store the object itself
         parent::store();
     
-        // delete the related SolucaoSoro objects
+        // delete the related Soro objects
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $this->id));
-        $repository = new TRepository('SolucaoSoro');
+        $repository = new TRepository('Soro');
         $repository->delete($criteria);
-        // store the related SolucaoSoro objects
+        // store the related Soro objects
         if ($this->soros)
         {
             foreach ($this->soros as $soro)
             {
-                $solucao_soro = new SolucaoSoro;
-                $solucao_soro->idsoro = $soro->id;
-                $solucao_soro->idsolucao = $this->id;
-                $solucao_soro->store();
+                unset($soro->id);
+                $soro->idsolucao = $this->id;
+                $soro->store();
             }
         }
-        // delete the related SolucaoHormonio objects
+        // delete the related Hormonio objects
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $this->id));
-        $repository = new TRepository('SolucaoHormonio');
+        $repository = new TRepository('Hormonio');
         $repository->delete($criteria);
-        // store the related SolucaoHormonio objects
+        // store the related Hormonio objects
         if ($this->hormonios)
         {
             foreach ($this->hormonios as $hormonio)
             {
-                $solucao_hormonio = new SolucaoHormonio;
-                $solucao_hormonio->idhormonio = $hormonio->id;
-                $solucao_hormonio->idsolucao = $this->id;
-                $solucao_hormonio->store();
+                unset($hormonio->id);
+                $hormonio->idsolucao = $this->id;
+                $hormonio->store();
+            }
+        }
+        // delete the related AplicacaoHormonio objects
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('idsolucao', '=', $this->id));
+        $repository = new TRepository('AplicacaoHormonio');
+        $repository->delete($criteria);
+        // store the related AplicacaoHormonio objects
+        if ($this->aplicacao_hormonios)
+        {
+            foreach ($this->aplicacao_hormonios as $aplicacao_hormonio)
+            {
+                unset($aplicacao_hormonio->id);
+                $aplicacao_hormonio->idsolucao = $this->id;
+                $aplicacao_hormonio->store();
             }
         }
     }
@@ -164,14 +215,20 @@ class Solucao extends TRecord
     public function delete($id = NULL)
     {
         $id = isset($id) ? $id : $this->id;
-        // delete the related SolucaoSoro objects
-        $repository = new TRepository('SolucaoSoro');
+        // delete the related Soro objects
+        $repository = new TRepository('Soro');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $id));
         $repository->delete($criteria);
         
-        // delete the related SolucaoHormonio objects
-        $repository = new TRepository('SolucaoHormonio');
+        // delete the related Hormonio objects
+        $repository = new TRepository('Hormonio');
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('idsolucao', '=', $id));
+        $repository->delete($criteria);
+        
+        // delete the related AplicacaoHormonio objects
+        $repository = new TRepository('AplicacaoHormonio');
         $criteria = new TCriteria;
         $criteria->add(new TFilter('idsolucao', '=', $id));
         $repository->delete($criteria);
