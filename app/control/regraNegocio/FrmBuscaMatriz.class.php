@@ -30,15 +30,15 @@ class FrmBuscaMatriz extends TWindow
         $matriz->setValue(TSession::getValue('matriz_numeroChipMatriz'));
         // add the form fields
         $this->form->addQuickField('Especie', $especie,  200);
-
+       // $this->form->addQuickField('Matriz',$matriz,100);
         // define the form action
-        $this->form->addQuickAction('Find', new TAction(array($this, 'onSearch')), 'ico_find.png');
+        $this->form->addQuickAction('Buscar', new TAction(array($this, 'onSearch')), 'ico_find.png');
         
         // creates a DataGrid
         $this->datagrid = new TQuickGrid;
         $this->datagrid->style = 'width: 100%';
         $this->datagrid->setHeight(230);
-        $this->datagrid->enablePopover('Title', 'Name {name}');
+        $this->datagrid->enablePopover('Title', 'Espécie {especie}');
         
         // creates the datagrid columns
         $this->datagrid->addQuickColumn('Código', 'cod_matriz', 'right', 40);
@@ -48,7 +48,7 @@ class FrmBuscaMatriz extends TWindow
         
 
         // creates two datagrid actions
-        $this->datagrid->addQuickAction('Select', new TDataGridAction(array($this, 'onSelect')), 'cod_matriz', 'ico_apply.png');
+        $this->datagrid->addQuickAction('Selecionar', new TDataGridAction(array($this, 'onSelect')), 'cod_matriz', 'ico_apply.png');
         
         // create the datagrid model
         $this->datagrid->createModel();
@@ -181,8 +181,8 @@ class FrmBuscaMatriz extends TWindow
             TTransaction::close();
             
             $object = new StdClass;
-            $object->matriz_id   = $matriz->idMatriz;
-            $object->matriz_numero = $matriz->numero;
+            $object->matrizes_idMatriz   = $matriz->cod_matriz;
+            $object->matrizes_numeroChipMatriz = $matriz->matriz;
             
             TForm::sendData('FrmMestreReproducao', $object);
             parent::closeWindow(); // closes the window
@@ -191,8 +191,8 @@ class FrmBuscaMatriz extends TWindow
         {
             // clear fields
             $object = new StdClass;
-            $object->matriz_id   = '';
-            $object->matriz_numero = '';
+            $object->matrizes_idMatriz   = '';
+            $object->matrizes_numeroChipMatriz = '';
             TForm::sendData('FrmMestreReproducao', $object);
             
             // undo pending operations

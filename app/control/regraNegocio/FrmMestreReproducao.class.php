@@ -64,7 +64,7 @@ class FrmMestreReproducao extends TPage
        $codigo              = new TEntry('codigo');
        $dataInicioReproducao = new TDate('dataInicioReproducao');
        $temperatura        = new TEntry('temperatura');
-       $especie            = new TDBCombo('idEspecie','dbwf','Especie','idEspecie','nomePopularEspecie');
+       $idEspecie            = new TDBCombo('idEspecie','dbwf','Especie','idEspecie','nomePopularEspecie');
        $climaDia           = new TEntry('climaDia');
        $pesoTotMatFemea    = new TEntry('pesoTotMatFemea');
        $pesoTotMatMacho    = new TEntry('pesoTotMatMacho');
@@ -74,8 +74,7 @@ class FrmMestreReproducao extends TPage
        $totalGeralHormonio = new TEntry('totalGeralHormonio');
        $dataFinalReproducao = new TEntry('dataFinalReproducao');
        $reproducao_incubadoras  = new TDBCheckGroup('reproducao_incubadoras','dbwf','Incubadora','idIncubadora','descIncubadora');
-       $idMatriz           = new TDBSeekButton('idMatriz','dbwf',$this->form->getName(),'Matriz','numeroChipMatriz','matrizes_idMatriz','matrizes_numeroChipMatriz');
-       //$matriz             = new TEntry('matriz');
+       $idMatriz  = new TSeekButton('idMatriz');
        $numero             = new TEntry('numeroChipMatriz');
        $pesoMatriz         = new TEntry('pesoMatriz');
        $identMatriz        = new TEntry('identMatriz');
@@ -91,7 +90,14 @@ class FrmMestreReproducao extends TPage
        {
             $codigo->setEditable(TRUE);
        }
+       $obj = new FrmBuscaMatriz;
+       
+       $action = new TAction(array($obj,'onReload'));
+       $idMatriz->setAction($action);
        $idMatriz->setExitAction(new TAction(array($this, 'onExitMatriz')));
+       
+       
+       
        
        $dataInicioReproducao->setMask('dd/mm/yyyy'); 
        $dataFinalReproducao->setMask('99/99/9999');
@@ -115,6 +121,8 @@ class FrmMestreReproducao extends TPage
        $qtdeMatFemea->style='margin-left:29px';
        $qtdeMatMacho->setSize('50%');
        $pesoGeralMatriz->setSize('50%');
+       
+       $temperatura->setTip('Temperatura em graus Célsius');
        
        $numero->setEditable(false);
        $sexoMatriz->setSize(50);      
@@ -152,7 +160,7 @@ class FrmMestreReproducao extends TPage
        $row->addcell($idReproducao);
        $tbl_dados_primarios->addRowSet(new TLabel('INICIO'.': ' ),    $dataInicioReproducao);
        $tbl_dados_primarios->addRowSet(new TLabel('TEMPERATURA'.': ' ),    $temperatura);
-       $tbl_dados_primarios->addRowSet(new TLabel('ESPÉCIE'.': '),    $especie);
+       $tbl_dados_primarios->addRowSet(new TLabel('ESPÉCIE'.': '),    $idEspecie );
        $tbl_dados_primarios->addRowSet(new TLabel('CLIMA DO DIA'.': '),    $climaDia);
        //$tbl_dados_primarios->addRowSet(new TLabel('FINAL'.': '),    $dataFinalReproducao);
        
@@ -190,8 +198,8 @@ class FrmMestreReproducao extends TPage
         $list_button->setAction(new TAction(array('FrmListaReproducao','onReload')), _t('Back to the listing'));
         $list_button->setImage('fa:table blue');
         
-        // define the form fields
-        $this->form->setFields(array($idReproducao, /*$equipeReproducao,*/ $txEclosao, $codigo, $dataInicioReproducao, $dataFinalReproducao, $temperatura, $climaDia, $pesoTotMatFemea, $pesoTotMatMacho,
+        // define the form fieldse
+        $this->form->setFields(array($idReproducao,$idEspecie, $txEclosao, $codigo, $dataInicioReproducao, $dataFinalReproducao, $temperatura, $climaDia, $pesoTotMatFemea, $pesoTotMatMacho,
         $qtdeMatFemea, $qtdeMatMacho, $pesoGeralMatriz, $txFecundacao, $totalGeralHormonio, $reproducao_incubadoras, $multi_matrizes, $save_button, $new_button, $list_button));
         
         $buttons = new THBox;
@@ -226,6 +234,7 @@ class FrmMestreReproducao extends TPage
            $this->form->validate();
                               
            $object = $this->form->getData('Reproducao');
+           //$object = new Reproducao;
            $data = $this->form->getData();
            $idReproducao = $object->idReproducao;
            $codigoTemp = 0;
@@ -262,7 +271,7 @@ class FrmMestreReproducao extends TPage
                $object->pesoTotMatFemea = $pF;
                $object->qtdeMatFemea = $qtdF;
                $object->qtdeMatMacho = $qtdM;
-               $object->pesoGeralMatriz = number_format(($object->pesoTotMatFemea + $object->pesoTotMatFemea),2,'.',',');
+               $object->pesoGeralMatriz = number_format(($object->pesoTotMatFemea + $object->pesoTotMatMacho),2,'.',',');
                $object->totalGeralHormonio = number_format(($object->pesoGeralMatriz * $CONSTHORM),2,'.',',');
            }
            if($data->reproducao_incubadoras)
@@ -278,9 +287,10 @@ class FrmMestreReproducao extends TPage
            $object->pesoGeralMatriz = str_replace(',','.',$object->pesoGeralMatriz);
            $object->dataInicioReproducao = TDate::date2us($object->dataInicioReproducao);
            $object->dataFinalReproducao = TDate::date2us($object->dataFinalReproducao);
-                  
+           //var_dump($object);       
            $object->store();
           
+          $data->idReproducao = $object->idReproducao; 
            
            
            TTransaction::close();

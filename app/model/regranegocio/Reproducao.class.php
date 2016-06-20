@@ -18,7 +18,7 @@ class Reproducao extends TRecord
     private $qtdeFemea = 0;
     private $qtdeMacho = 0;
     private $pesoTotalMatriz = 0;
-    
+    private $especie;
     /**
      * Constructor method
      */
@@ -28,7 +28,7 @@ class Reproducao extends TRecord
         parent::addAttribute('codigo');
         parent::addAttribute('dataInicioReproducao');
         parent::addAttribute('temperatura');
-        parent::addAttribute('equipeReproducao');
+        parent::addAttribute('idEspecie');
         parent::addAttribute('climaDia');
         parent::addAttribute('pesoTotMatFemea');
         parent::addAttribute('pesoTotMatMacho');
@@ -65,15 +65,34 @@ class Reproducao extends TRecord
        return $this->pesoTotalMatriz; 
     
     }
+    public function set_especie(Especie $especie)
+    {
+    
+        $this->especie = $especie;
+        $this->idEspecie = $especie->idEspecie;
+    
+    }
+    public function get_especie()
+    {
+    
+        if(empty($this->especie))
+        {
+            $this->especie = new Especie($this->idEspecie);
+        }
+        return $this->especie;
+    }
     public function clearParts()
     {
         $this->incubadoras = array();
         $this->matrizes = array();
+        
     }
 
     /**
      * Load the object and its aggregates
      * @param $id object ID*/
+    
+   
     public function addIncubadora(Incubadora $incubadora)
     {
         $this->incubadoras[]= $incubadora;

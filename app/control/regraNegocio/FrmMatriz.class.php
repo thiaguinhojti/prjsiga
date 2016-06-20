@@ -142,7 +142,7 @@ class FrmMatriz extends TPage
             **/
             
             $this->form->validate(); // validate form data
-            $object = new Matriz;  // create an empty object          
+            //$object = new Matriz;  // create an empty object          
             $object = new Matriz;  // create an empty object
             $data = $this->form->getData(); // get form data as array
             $object->fromArray( (array) $data); // load the object with data

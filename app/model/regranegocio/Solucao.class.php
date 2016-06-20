@@ -171,7 +171,7 @@ class Solucao extends TRecord
         {
             foreach ($this->soros as $soro)
             {
-                unset($soro->id);
+                unset($soro->idSoro);
                 $soro->idsolucao = $this->id;
                 $soro->store();
             }
@@ -186,7 +186,7 @@ class Solucao extends TRecord
         {
             foreach ($this->hormonios as $hormonio)
             {
-                unset($hormonio->id);
+                unset($hormonio->idHormonio);
                 $hormonio->idsolucao = $this->id;
                 $hormonio->store();
             }
@@ -201,7 +201,7 @@ class Solucao extends TRecord
         {
             foreach ($this->aplicacao_hormonios as $aplicacao_hormonio)
             {
-                unset($aplicacao_hormonio->id);
+                unset($aplicacao_hormonio->idAplicacaoHormonio);
                 $aplicacao_hormonio->idsolucao = $this->id;
                 $aplicacao_hormonio->store();
             }
