@@ -13,9 +13,9 @@ class Soro extends TRecord
     /**
      * Constructor method
      */
-    public function __construct($id = NULL, $callObjectLoad = TRUE)
+    public function __construct($idSoro = NULL, $callObjectLoad = TRUE)
     {
-        parent::__construct($id, $callObjectLoad);
+        parent::__construct($idSoro, $callObjectLoad);
         parent::addAttribute('nomeSoro');
         parent::addAttribute('descSoro');
         parent::addAttribute('valorSoro');

@@ -152,7 +152,7 @@ class FrmSolucao extends TPage
         $list_button->setAction(new TAction(array('FrmListaReproducao','onReload')), _t('Back to the listing'));
         $list_button->setImage('fa:table blue');
         
-        $this->form->setFields(array($idSolucao, $cmbReproducao, $cod_reproducao, $pVolTotalAplicado, $sVolTotalAplicado, $lista_soro, $save_button, $new_button, $list_button));
+        $this->form->setFields(array($idSolucao, $cmbReproducao, $cod_reproducao, $pVolTotalAplicado, $sVolTotalAplicado, $lista_soro, $lista_hormonio, $save_button, $new_button, $list_button));
         
        
         
@@ -179,6 +179,8 @@ class FrmSolucao extends TPage
        try
        {
            TTransaction::open('dbwf');
+           TTransaction::setLogger(new TLoggerTXT('C:\logSolucao.txt'));
+           TTransaction::log('Inserir aplicacao ');
                $this->form->validate(); // validate form data
                $object =$this->form->getData('Solucao');  // create an empty object
                $idReproducao = $object->idSolucao;
@@ -203,6 +205,7 @@ class FrmSolucao extends TPage
                        $object->addHormonio($hormonio);
                    }
                }
+               
                $object->store(); // save the object
                 
                 // get the generated idSolucao
