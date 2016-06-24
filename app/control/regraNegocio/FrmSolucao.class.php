@@ -39,13 +39,56 @@ class FrmSolucao extends TPage
         $idSolucao     = new THidden('idSolucao');
         $cmbReproducao = new TDBSeekButton('idReproducao','dbwf',$this->form->getName(),'Reproducao','codigo','idReproducao','cod_reproducao');
         $cod_reproducao = new TEntry('cod_reproducao');
+        $cod_reproducao->setTip('Número do ciclo reprodutivo');
         $pVolTotalAplicado = new TEntry('pVolTotalAplicado');
         $pVolTotalAplicado->setTip('Volume total de solução a ser aplicado na primeira aplicação em mg');
         $sVolTotalAplicado = new TEntry('sVolTotalAplicado');
         $sVolTotalAplicado->setTip('Volume total de solução a ser aplicado na segunda aplicação em mg');
+        #####Campos segunda Pagina#####
+        $lista_soro = new TMultiField('lista_soro');
+        $nomeSoro = new TEntry('nomeSoro');
+        $nomeSoro->setTip('Informe o nome da solução fisiológica');
+        $descSoro = new TEntry('descSoro');
+        $descSoro->setTip('Descrição da solução fisiológica utilizada');
+        $valorSoro = new TEntry('valorSoro');
+        $valorSoro->setTip('valor da solução fisiológica por litro');
+        $qtdeAplicSoroKvP = new TEntry('qtdeAplicSoroKvP');
+        $qtdeAplicSoroKvP->setTip('Volume total de Soro a ser utilizado na composição do hormônio');
+        $valorSoroAplicacao = new TEntry('valorSoroAplicacao');
+        $valorSoroAplicacao->setTip('Valor total gasto com solução fisiológica no ciclo reprodutivo');
+         #####Campos terceira Página#######
+        $lista_hormonio = new TMultiField('lista_hormonio');
+        $nomeHormonio = new TEntry('nomeHormonio');
+        $nomeHormonio->setTip('Informe o nome do hormônio que será utilizado');
+        $descHormonio = new TEntry('descHormonio');
+        $descHormonio->setTip('Descrição do hormônio que será utilizado');
+        $valorHormonio = new TEntry('valorHormonio');
+        $valorHormonio->setTip('Valor do hormônio utilizado em gramas');
+        $qtdeHormonioAplicKvP = new TEntry('qtdeHormonioAplicKvP');
+        $qtdeHormonioAplicKvP->setTip('Quantidade de hormônio que irá compor a solução');
+        $totalHormonioAplicacao = new TEntry('totalHormonioAplicacao');
+        $totalHormonioAplicacao->setTip('Total gasto em hormônio para esse ciclo reprodutivo');
+        
         
         //validações
         $cod_reproducao->setExitAction(new TAction(array($this,'onSelect')));
+        $valorSoro->setExitAction(new TAction(array($this,'onCalcularSoro')));
+        $valorHormonio->setExitAction(new TAction(array($this,'onCalcularHormonio')));
+        
+        //desabilitando campos
+        $pVolTotalAplicado->setEditable(false);
+        $sVolTotalAplicado->setEditable(false);
+        $qtdeAplicSoroKvP->setEditable(false);
+        $valorSoroAplicacao->setEditable(false);
+        $qtdeHormonioAplicKvP->setEditable(false);
+        $totalHormonioAplicacao->setEditable(false);
+        
+        $pVolTotalAplicado->style='color:#FF0000;';
+        $sVolTotalAplicado->style='color:#FF0000;';
+        $qtdeAplicSoroKvP->style='color:#FF0000;';
+        $valorSoroAplicacao->style='color:#FF0000;';
+        $qtdeHormonioAplicKvP->style='color:#FF0000;';
+        $totalHormonioAplicacao->style='color:#FF0000;';
         
         
          ####Adicionando os campos na aba do notebook####                
@@ -57,14 +100,8 @@ class FrmSolucao extends TPage
         
         
         
-        #####Campos segunda Pagina#####
-        $lista_soro = new TMultiField('lista_soro');
-        $nome_soro = new TEntry('nomeSoro');
-        $desc_soro = new TEntry('descSoro');
-        $valor_soro = new TEntry('valorSoro');
-        $qtdeSoroAplicKvP = new TEntry('qtdeSoroAplicKvP');
-        $totalSoroAplicacao = new TEntry('totalSoroAplicacao');
         
+       
         ####Adicionando os campos na aba do notebook####  
         
         $row = $tbl_soro->addRow();
@@ -72,21 +109,15 @@ class FrmSolucao extends TPage
         $cell->valign  = 'top';
         $lista_soro->setHeight(150);
         $lista_soro->setClass('Soro');
-        $lista_soro->addField('nomeSoro','NOME'.':',$nome_soro,150);
-        $lista_soro->addField('descSoro','DESCRIÇÃO'.':',$desc_soro,150);
-        $lista_soro->addField('valorSoro','VALOR EM R$'.':',$valor_soro,70);
-        $lista_soro->addField('qtdeSoroAplicKvP','TOTAL A SER APLICADO'.':',$qtdeSoroAplicKvP,70);
-        $lista_soro->addField('totalSoroAplicacao','TOTAL SORO EM R$'.':',$totalSoroAplicacao,70);
+        $lista_soro->addField('nomeSoro','NOME'.':',$nomeSoro,150);
+        $lista_soro->addField('descSoro','DESCRIÇÃO'.':',$descSoro,150);
+        $lista_soro->addField('valorSoro','VALOR EM R$'.':',$valorSoro,70);
+        $lista_soro->addField('qtdeAplicSoroKvP','TOTAL A SER APLICADO'.':',$qtdeAplicSoroKvP,70);
+        $lista_soro->addField('valorSoroAplicacao','TOTAL SORO EM R$'.':',$valorSoroAplicacao,70);
         $row=$tbl_soro->addRow();
         $row->addCell($lista_soro);
         
-        #####Campos terceira Página#######
-        $lista_hormonio = new TMultiField('lista_hormonio');
-        $nome_hormonio = new TEntry('nomeHormonio');
-        $desc_hormonio = new TEntry('descHormonio');
-        $valor_hormonio = new TEntry('valorHormonio');
-        $qtdeHormonioAplicKvP = new TEntry('qtdeHormonioAplicKvP');
-        $totalHormonioAplicacao = new TEntry('totalHormonioAplicacao');
+       
         
         ####Adicionando os campos na aba do notebook####  
         
@@ -95,11 +126,11 @@ class FrmSolucao extends TPage
         $cell->valign  = 'top';
         $lista_hormonio->setHeight(150);
         $lista_hormonio->setClass('Hormonio');
-        $lista_hormonio->addField('nomeHormonio','NOME'.':',$nome_hormonio,150);
-        $lista_hormonio->addField('descHormonio','DESCRIÇÃO'.':',$desc_hormonio,150);
-        $lista_hormonio->addField('valorHormonio','VALOR EM R$'.':',$valor_hormonio,70);
-        $lista_hormonio->addField('qtdeHormonioAplicKvP','TOTAL A SER APLICADO'.':',$qtdeHormonioAplicKvP,70);
-        $lista_hormonio->addField('totalHormonioAplicacao','TOTAL HORMÔNIO EM R$'.':',$totalHormonioAplicacao,70);
+        $lista_hormonio->addField('nomeHormonio','NOME'.':',$nomeHormonio,150);
+        $lista_hormonio->addField('descHormonio','DESCRIÇÃO'.':',$descHormonio,150);
+        $lista_hormonio->addField('valorHormonio','VALOR EM R$'.':',$valorHormonio,70);
+        $lista_hormonio->addField('qtdeAplicKvP','TOTAL A SER APLICADO'.':',$qtdeHormonioAplicKvP,70);
+        $lista_hormonio->addField('valorHormonioAplicacao','TOTAL HORMÔNIO EM R$'.':',$totalHormonioAplicacao,70);
         $row=$tbl_hormonio->addRow();
         $row->addCell($lista_hormonio);
         
@@ -152,7 +183,7 @@ class FrmSolucao extends TPage
         $list_button->setAction(new TAction(array('FrmListaReproducao','onReload')), _t('Back to the listing'));
         $list_button->setImage('fa:table blue');
         
-        $this->form->setFields(array($idSolucao, $cmbReproducao, $cod_reproducao, $pVolTotalAplicado, $sVolTotalAplicado, $lista_soro, $lista_hormonio, $save_button, $new_button, $list_button));
+        $this->form->setFields(array($idSolucao, $cmbReproducao, $cod_reproducao, $pVolTotalAplicado, $sVolTotalAplicado, $valorSoro, $lista_soro,  $totalHormonioAplicacao, $valorSoroAplicacao, $qtdeHormonioAplicKvP, $lista_hormonio, $save_button, $new_button, $list_button));
         
        
         
@@ -197,6 +228,7 @@ class FrmSolucao extends TPage
                    
                    }
                }
+               
                if($object->lista_hormonio)
                {
                
@@ -269,6 +301,59 @@ class FrmSolucao extends TPage
         }  
    
    }
+   public static function onCalcularSoro($param)
+   {
+       
+       
+       $QTDE_SORO = 0.2;
+       if(isset($param['lista_soro_valorSoro'])&& $param['lista_soro_valorSoro'])
+       {
+            try
+            {
+               TTransaction::open('dbwf');
+                   $repSoro = new Reproducao($param['idReproducao']);
+                   $object = new StdClass;
+                   $object->lista_soro_qtdeAplicSoroKvP = number_format(($QTDE_SORO * $repSoro->pesoGeralMatriz),2,'.',',');
+                   
+                   $object->lista_soro_valorSoroAplicacao = number_format(((($param['lista_soro_valorSoro'])/1000) * $object->lista_soro_qtdeAplicSoroKvP),2,'.',',');
+                   TForm::sendData('form_solucao',$object);
+               TTransaction::close();
+           }
+           catch(Exception $e)
+           {
+                new TMessage('error', '<b>Erro</b> ' . $e->getMessage());
+                TTransaction::rollback();
+           
+           }
+        }
+   }
+    public static function onCalcularHormonio($param)
+   {
+       
+       
+       $QTDE_HIPOFISE = 0.5;
+       if(isset($param['lista_hormonio_valorHormonio'])&& $param['lista_hormonio_valorHormonio'])
+       {
+            try
+            {
+               TTransaction::open('dbwf');
+                   $repSoro = new Reproducao($param['idReproducao']);
+                   $object = new StdClass;
+                   $object->lista_hormonio_qtdeAplicKvP = number_format(($QTDE_HIPOFISE * $repSoro->pesoGeralMatriz),2,'.',',');
+                   
+                   $object->lista_hormonio_valorHormonioAplicacao = number_format(((($param['lista_hormonio_valorHormonio'])/1000) * $object->lista_hormonio_qtdeAplicKvP),2,'.',',');
+                   TForm::sendData('form_solucao',$object);
+               TTransaction::close();
+           }
+           catch(Exception $e)
+           {
+                new TMessage('error', '<b>Erro</b> ' . $e->getMessage());
+                TTransaction::rollback();
+           
+           }
+        }
+   }
+   
 }
 
 
